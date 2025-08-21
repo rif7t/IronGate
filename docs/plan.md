@@ -3,6 +3,7 @@ IronGate — 6-Week Build Plan
 
 
 Week 1 — Foundations + SBOM / Scans / Policies
+
 Day 1
 
 Morning: Create repo, set up Go hello-api service, add minimal Dockerfile.
