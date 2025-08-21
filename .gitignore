@@ -1,0 +1,11 @@
+﻿__pycache__/
+*.pyc
+.venv/
+bin/
+*.exe
+target/
+node_modules/
+.DS_Store
+.idea/
+.vscode/
+irongate_backup/
