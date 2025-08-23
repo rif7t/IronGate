@@ -11,7 +11,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy your actual app code
-COPY . .
+COPY testapp.py
 
 # Expose port (FastAPI default is 8000)
 EXPOSE 8000
