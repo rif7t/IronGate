@@ -6,12 +6,20 @@ jobs:
 
   build:
 
+    name: Build Image and Run Image Scan
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag test-image-name:$(date +%s)
+
+    - name: Run Image Scan using Docker Scout
+      run:  
+        curl -fsSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh -o install-scout.sh
+        sh install-scout.sh
+        docker scout quickview
+        docker scout cves
       
   sast_scan:
     name: Run Bandit Scan
