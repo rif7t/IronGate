@@ -23,15 +23,11 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag test-image-name:$(date +%s)
 
-    - name: Install Docker Scout
+    - name: Download Docker Scout
       run:  curl -fsSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh -o install-scout.sh
-            
 
-    - name: Install Docker Scout and Run Image Scanning with Docker Scout
-      run: chmod +x install-scout.sh
-
-    - name: Run Image Scanning with Docker Scout
-      run: ./install-scout.sh
+    - name: Install Docker Scout and Run Image Scanning 
+      run: sh install-scout.sh
            docker scout quickview
            docker scout cves
       
