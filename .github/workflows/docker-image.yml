@@ -30,7 +30,7 @@ jobs:
       run: sh install-scout.sh
 
     - name: Install Docker Scout and Run Image Scanning 
-      run: docker scout quickview
+      run: docker scout quickview qv
            docker scout cves
       
   sast_scan:
