@@ -29,7 +29,9 @@ jobs:
 
     - name: Install Docker Scout and Run Image Scanning with Docker Scout
       run: chmod +x install-scout.sh
-           ./install-scout.sh
+
+    - name: Run Image Scanning with Docker Scout
+      run: ./install-scout.sh
            docker scout quickview
            docker scout cves
       
