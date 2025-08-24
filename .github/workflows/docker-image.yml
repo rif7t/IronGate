@@ -25,18 +25,18 @@ jobs:
       run: docker build . --file Dockerfile --tag test-image-name:$(date +%s)
 
     - name: Scan the Docker Image
-      uses: docker/scout-action@v1, docker/login-action@v3
+      uses: docker/login-action@v3
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+        
+    - uses: docker/scout-action@v1
+      with:
         command: quickview
         image: ${{ env.IMAGE_REF }}
-    - uses: docker/scout-action@v1, docker/login-action@v3
+    - uses: docker/scout-action@v1
       with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
         command: cves
         image: ${{ env.IMAGE_REF }}
         only-severities: critical,high
