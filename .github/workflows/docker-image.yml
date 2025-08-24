@@ -23,7 +23,6 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag test-image-name:$(date +%s)
 
-    - name: Login and Scan Image
     - uses: docker/scout-action@v1, docker/login-action@v3
       with:
         registry: ghcr.io
