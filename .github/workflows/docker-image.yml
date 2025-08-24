@@ -27,7 +27,7 @@ jobs:
     - name: Scan the Docker Image
     - uses: docker/scout-action@v1.18.2
       with:
-        dockerhub-user: ${{secretr.DOCKERUSERNAME }}
+        dockerhub-user: ${{secrets.DOCKERUSERNAME }}
         dockerhub-password: ${{ secrets.DOCKERPASSWORD }}
         command: cves, quickview
         only-severities: critical, high
