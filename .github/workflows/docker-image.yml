@@ -25,7 +25,7 @@ jobs:
       run: docker build . --file Dockerfile --tag test-image-name:$(date +%s)
 
     - name: Scan the Docker Image
-    - uses: docker/scout-action@v1.18.2
+      uses: docker/scout-action@v1.18.2
       with:
         dockerhub-user: ${{secrets.DOCKERUSERNAME }}
         dockerhub-password: ${{ secrets.DOCKERPASSWORD }}
