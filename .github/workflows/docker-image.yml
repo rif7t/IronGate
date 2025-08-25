@@ -1,88 +1,134 @@
+
 name: Docker Image CI
-
-permissions:
-  contents: read
-  packages: write       
-  id-token: write       
-
 
 on: [push]
 
+permissions:
+  contents: read
+
 jobs:
-
   build:
-
-    name: Build Image and Run Image Scan
+    name: Build & Push Image
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      packages: write        
+    outputs:
+      image_repo: ${{ steps.setrepo.outputs.image_repo }}
+      digest: ${{ steps.digest.outputs.digest }}
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    - name: Set lowercase image repo
-      run: echo "IMAGE_REPO=ghcr.io/${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
-      
-    - name: Docker Login 
-      uses: docker/login-action@v3            
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-             
-    - name: Docker Build
-      uses: docker/build-push-action@v5
-      id: build
-      with:
-        context: .
-        push: true
-        tags: ${{ env.IMAGE_REPO }}:main
-        
-    - name: Scan the Docker Image
-      uses: docker/scout-action@v1.18.2
-      with:
-        dockerhub-user: ${{secrets.DOCKERUSERNAME }}
-        dockerhub-password: ${{ secrets.DOCKERPASSWORD }}
-        command: cves, quickview
-        only-severities: critical, high
-    
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag test-image-name:$(date +%s)
+      - name: Set lowercase image repo
+        id: setrepo
+        run: |
+          echo "image_repo=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+          echo "IMAGE_REPO=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
 
-    - name: Show Digest
-      run: echo "Digest = ${{ steps.build.outputs.digest }}"
+      - name: Docker Login (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Cosign Installer
-      uses: sigstore/cosign-installer@v3.9.2
-    
-    - name: Sign container image using annotatoins from env (keyless)
-      run: cosign sign --yes ghcr.io/${{ env.IMAGE_REPO }}@${{ steps.build.outputs.digest }}
-      
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Docker Build & Push
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE_REPO }}:main
+
+      - name: Expose digest as output
+        id: digest
+        run: echo "digest=${{ steps.build.outputs.digest }}" >> "$GITHUB_OUTPUT"
+
+  image_scan:
+    name: Image Scan (Docker Scout)
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: read
+      packages: read         
+    steps:
+      - name: Docker Login (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Optional: Docker Hub login if your Scout setup requires a Docker Hub identity
+      # - uses: docker/login-action@v3
+      #   with:
+      #     registry: docker.io
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Quickview
+        uses: docker/scout-action@v1
+        with:
+          command: quickview
+          image: ${{ needs.build.outputs.image_repo }}@${{ needs.build.outputs.digest }}
+
+      - name: CVEs (fail on High/Critical)
+        uses: docker/scout-action@v1
+        with:
+          command: cves
+          image: ${{ needs.build.outputs.image_repo }}@${{ needs.build.outputs.digest }}
+          only-severities: critical,high
+
+  sign:
+    name: Sign (Cosign keyless)
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'  
+    permissions:
+      contents: read
+      packages: write
+      id-token: write      
+    steps:
+      - uses: sigstore/cosign-installer@v3.6.0
+      - name: Cosign sign by digest
+        env:
+          IMAGE_REF: ${{ needs.build.outputs.image_repo }}@${{ needs.build.outputs.digest }}
+        run: |
+          echo "Signing $IMAGE_REF"
+          cosign sign --yes "$IMAGE_REF"
+      - name: Verify signature
+        env:
+          IMAGE_REF: ${{ needs.build.outputs.image_repo }}@${{ needs.build.outputs.digest }}
+        run: cosign verify "$IMAGE_REF"
+
   sast_scan:
     name: Run Bandit Scan
     runs-on: ubuntu-latest
-
     steps:
-    -  name: Run Checkout code
-       uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v3
-      with: 
-        python-version: 3.8
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-    - name: Install Bandit
-      run: pip install bandit
+      - name: Install Bandit
+        run: pip install bandit
 
-    - name: Run Bandit
-      run: bandit -ll -ii -r . -f json -o bandit-report.json
+      - name: Run Bandit
+        run: bandit -ll -ii -r . -f json -o bandit-report.json
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: bandit-findings
-        path: bandit-report.json
-    
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bandit-findings
+          path: bandit-report.json
+
       
       
     
