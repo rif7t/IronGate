@@ -33,8 +33,6 @@ jobs:
       uses: docker/build-push-action@v5
       id: build
       with:
-        dockerhub-user: ${{secrets.DOCKERUSERNAME }}
-        dockerhub-password: ${{ secrets.DOCKERPASSWORD }}
         context: .
         push: true
         tags: ${{ env.IMAGE_REPO }}:main
@@ -57,7 +55,7 @@ jobs:
       uses: sigstore/cosign-installer@v3.9.2
     
     - name: Cosign sign (keyless)
-      run: cosign sign --yes ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
+      run: cosign sign --yes ghcr.io/${{ env.IMAGE_REPO }}@${{ steps.build.outputs.digest }}
       
   sast_scan:
     name: Run Bandit Scan
