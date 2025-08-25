@@ -55,10 +55,7 @@ jobs:
       uses: sigstore/cosign-installer@v3.9.2
     
     - name: Sign container image using annotatoins from env (keyless)
-      run: cosign sign --yes \
-           -a "repo=${{ github.repository }}" \
-           -a "workflow=${{ github.workflow }}" \
-           ghcr.io/${{ env.IMAGE_REPO }}@${{ steps.build.outputs.digest }}
+      run: cosign sign --yes ghcr.io/${{ env.IMAGE_REPO }}@${{ steps.build.outputs.digest }}
       
   sast_scan:
     name: Run Bandit Scan
