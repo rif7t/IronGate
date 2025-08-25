@@ -24,11 +24,11 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag test-image-name:$(date +%s)
 
-    - name: Sign the built Docker Image
-      run: cosign sign --key cosign.key ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.run_id }}
-      
     - name: Cosign Installer
       uses: sigstore/cosign-installer@v3.9.2
+      
+    - name: Sign the built Docker Image
+      run: cosign sign --key cosign.key ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.run_id }}
       
     - name: Scan the Docker Image
       uses: docker/scout-action@v1.18.2
