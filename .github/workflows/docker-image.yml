@@ -56,9 +56,9 @@ jobs:
     
     - name: Sign container image using annotatoins from env (keyless)
       run: cosign sign --yes \
-             -a "repo=${{ github.repository }}" \
-             -a "workflow=${{ github.workflow }}" \
-             ghcr.io/${{ env.IMAGE_REPO }}@${{ steps.build.outputs.digest }}
+           -a "repo=${{ github.repository }}" \
+           -a "workflow=${{ github.workflow }}" \
+           ghcr.io/${{ env.IMAGE_REPO }}@${{ steps.build.outputs.digest }}
       
   sast_scan:
     name: Run Bandit Scan
