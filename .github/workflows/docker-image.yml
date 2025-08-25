@@ -26,9 +26,9 @@ jobs:
 
     - name: Cosign Installer
       uses: sigstore/cosign-installer@v3.9.2
-      
-    - name: Sign the built Docker Image
-      run: cosign sign --key ${{ secrets.COSIGN_PRIVATE_KEY }} ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.run_id }}
+
+    - name: Cosign sign (keyless)
+      run: cosign sign --yes ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
       
     - name: Scan the Docker Image
       uses: docker/scout-action@v1.18.2
