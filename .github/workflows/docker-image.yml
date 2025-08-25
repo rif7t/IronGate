@@ -107,7 +107,10 @@ jobs:
       - name: Verify signature
         env:
           IMAGE_REF: ${{ needs.build.outputs.image_repo }}@${{ needs.build.outputs.digest }}
-        run: cosign verify "$IMAGE_REF"
+        run: cosign verify \
+              --certificate-identity-regexp "https://github.com/${{ github.repository }}/.*" \
+              --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+              "$IMAGE_REF"
 
   sast_scan:
     name: Run Bandit Scan
