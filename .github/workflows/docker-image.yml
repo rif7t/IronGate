@@ -21,8 +21,22 @@ jobs:
 
     - name: Set lowercase image repo
       run: echo "IMAGE_REPO=ghcr.io/${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
-
-    
+      
+    - name: Docker Login 
+      uses: docker/login-action@v3            
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Scan the Docker Image
+      uses: docker/scout-action@v1.18.2
+      with:
+        dockerhub-user: ${{secrets.DOCKERUSERNAME }}
+        dockerhub-password: ${{ secrets.DOCKERPASSWORD }}
+        command: cves, quickview
+        only-severities: critical, high
+        
     - name: Docker Build
       uses: docker/build-push-action@v5
       id: build
@@ -30,12 +44,6 @@ jobs:
         context: .
         push: true
         tags: ${{ env.IMAGE_REPO }}:main
-      
-    - uses: docker/login-action@v3            
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
       
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag test-image-name:$(date +%s)
@@ -48,16 +56,6 @@ jobs:
     
     - name: Cosign sign (keyless)
       run: cosign sign --yes ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
-      
-    - name: Scan the Docker Image
-      uses: docker/scout-action@v1.18.2
-      with:
-        dockerhub-user: ${{secrets.DOCKERUSERNAME }}
-        dockerhub-password: ${{ secrets.DOCKERPASSWORD }}
-        command: cves, quickview
-        only-severities: critical, high
-
-    
       
   sast_scan:
     name: Run Bandit Scan
