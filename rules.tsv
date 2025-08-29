@@ -1,0 +1,4 @@
+# ruleId\tthreshold\taction
+10021\tINFO\tIGNORE
+90022\tMEDIUM\tFAIL
+40012\tHIGH\tFAIL
