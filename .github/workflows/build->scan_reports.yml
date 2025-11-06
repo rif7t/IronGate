@@ -162,7 +162,7 @@ jobs:
         - uses: docker/login-action@v3
           with:
             registry: ghcr.io
-            username: rif7t
+            username: ${{ github.actor }}
             password: ${{ secrets.GHCR_TOKEN }}
     
         - uses: addnab/docker-run-action@v3
@@ -170,9 +170,8 @@ jobs:
             # Image
             image: ghcr.io/${{ github.repository_owner }}/irongate:latest
             options: -d -p 8000:80 --name app_container 
-            registry: docker.io
-            username: ${{ secrets.DOCKERUSERNAME }}
-            password: ${{ secrets.DOCKERPASSWORD }}
+            username: ${{ github.actor }}
+            password: ${{ secrets.GHCR_TOKEN }}
             
         - name: ZAP Scan
           uses: zaproxy/action-baseline@v0.15.0
