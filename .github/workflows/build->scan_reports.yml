@@ -170,8 +170,6 @@ jobs:
             # Image
             image: ghcr.io/${{ github.repository_owner }}/irongate:latest
             options: -d -p 8000:80 --name app_container 
-            username: ${{ github.actor }}
-            password: ${{ secrets.GHCR_TOKEN }}
             
         - name: ZAP Scan
           uses: zaproxy/action-baseline@v0.15.0
