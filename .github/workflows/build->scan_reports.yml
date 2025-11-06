@@ -150,6 +150,7 @@ jobs:
       name: Run DAST scan on the web application
       permissions:
         contents: read
+        packages: read
         security-events: write   
         checks: write            
         pull-requests: write    
