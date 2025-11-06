@@ -18,7 +18,7 @@ jobs:
           go-version: "1.22"
 
       - name: Build hello-api-go
-        working-directory: apps/hello-api-go
+        working-directory: /apps/hello-api-go
         run: |
           go build -v ./...
           ./hello-api-go & sleep 1
