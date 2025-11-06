@@ -24,4 +24,4 @@ jobs:
       - name: Build hello-api-go
         run: |
           go build -v server.go
-          curl localhost:8080/health | grep -q "ok"
+          curl localhost:8000/health | grep -q "ok"
