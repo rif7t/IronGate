@@ -19,11 +19,21 @@
 # Run the app with uvicorn (for FastAPI/Flask)
 #CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 # Build stage
+# Build stage
 FROM golang:1.22 AS builder
 WORKDIR /app
-COPY . .
+
+# Copy only the Go server folder
+COPY apps/go_server ./go_server
+
+# Set working directory to the Go server folder
+WORKDIR /app/go_server
+
+# Download dependencies
 RUN go mod download
-RUN go build -o server .
+
+# Build the Go binary
+RUN go build -o /app/server .
 
 # Run stage
 FROM gcr.io/distroless/base-debian12
@@ -32,3 +42,4 @@ COPY --from=builder /app/server .
 
 EXPOSE 8000
 CMD ["./server"]
+
