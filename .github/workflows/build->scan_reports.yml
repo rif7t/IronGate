@@ -168,7 +168,7 @@ jobs:
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.15.0
         with:
-          docker_name: image_repo
+          docker_name: ${{ needs.build.outputs.image_repo }}@${{ needs.build.outputs.digest }}
           target: 'http://testphp.vulnweb.com/'
           rules_file_name: 'rules.tsv'
           cmd_options: '-a'
