@@ -34,6 +34,11 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: docker/setup-buildx-action@v3
+      - name: Convert repo name to lowercase
+        run: |
+          REPO_LC=$(echo "${GITHUB_REPOSITORY##*/}" | tr '[:upper:]' '[:lower:]')
+          echo "repo_lc=$REPO_LC" >> $GITHUB_ENV
+
       - name: Build & Push Docker images
         id: build
         uses: docker/build-push-action@v6.18.0
@@ -41,7 +46,7 @@ jobs:
           sbom: true
           context: .
           push: true
-          tags: ghcr.io/test_repo:${{ github.sha }}
+          tags: ghcr.io/${{ github.repository_owner }}/${{ env.repo_lc }}:latest
 
       - name: Expose digest as output
         id: digest
@@ -168,7 +173,7 @@ jobs:
       - uses: addnab/docker-run-action@v3
         with:
           # Image
-          image: ghcr.io/test_repo:${{ github.sha }}
+          image: ghcr.io/${{ github.repository_owner }}/${{ env.repo_lc }}:latest
           options: -d -p 8080:80 --name app_container
           
       - name: ZAP Scan
