@@ -16,11 +16,6 @@ jobs:
     outputs:
       image_repo: ${{ steps.setrepo.outputs.image_repo }}
       digest: ${{ steps.digest.outputs.digest }}
-    services:
-      registry:
-        image:  r1ft/irongate:latest
-        ports:
-        - 8000:8000
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
