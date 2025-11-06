@@ -163,24 +163,21 @@ jobs:
             username: ${{ secrets.DOCKERUSERNAME }}
             password: ${{ secrets.DOCKERPASSWORD }}
     
-        - uses: addnab/docker-run-action@v3
-          with:
-            # Image
-            image: r1ft/irongate:latest
-            options: --network host -d --name app_container
-            docker_network: zapnet
+        - name: Create Docker network
+          run: docker network create zapnet
+      
+        - name: Run app container
+          run: |
+            docker run -d --name app_container \
+              --network zapnet \
+              r1ft/irongate:latest
 
-            
-        - name: ZAP Scan
-          uses: zaproxy/action-baseline@v0.15.0
-          with:
-            target: 'http://localhost:8000'
-            rules_file_name: 'rules.tsv'
-            cmd_options: '-a'
-            allow_issue_writing: false
-          env:
-            DOCKER_NETWORK: zapnet
-            
+        - name: Run ZAP in same network
+          run: |
+            docker run --network zapnet \
+              r1ft/irongate:latest zap-baseline.py \
+              -t http://app_container:8000 -r zap_report.html -a
+
         
         - name: Upload HTML report
           uses: actions/upload-artifact@v4
