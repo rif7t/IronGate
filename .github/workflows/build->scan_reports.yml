@@ -168,7 +168,9 @@ jobs:
             # Image
             image: ghcr.io/${{ github.repository_owner }}/irongate:latest
             options: -d -p 8000:80 --name app_container 
-            pull: false
+            registry: docker.io
+            username: ${{ secrets.DOCKERUSERNAME }}
+            password: ${{ secrets.DOCKERPASSWORD }}
             
         - name: ZAP Scan
           uses: zaproxy/action-baseline@v0.15.0
