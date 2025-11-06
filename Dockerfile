@@ -19,7 +19,7 @@
 # Run the app with uvicorn (for FastAPI/Flask)
 #CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 # ---- Build stage ----
-FROM golang:1.22 AS builder
+FROM golang:1.25 AS builder
 
 # Set working directory
 WORKDIR /app
