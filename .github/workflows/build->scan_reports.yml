@@ -166,7 +166,7 @@ jobs:
         - uses: addnab/docker-run-action@v3
           with:
             # Image
-            image: ghcr.io/${{ github.repository_owner }}/irongate:latest
+            image: ghcr.io/${{ github.repository_owner }}/irongate:latest@${{ github.sha }}
             options: -d -p 8000:80 --name app_container 
             registry: docker.io
             username: ${{ secrets.DOCKERUSERNAME }}
