@@ -18,7 +18,7 @@ jobs:
       digest: ${{ steps.digest.outputs.digest }}
     services:
       registry:
-        image:  registry:1
+        image:  irongate:latest
         ports:
         - 8000:8000
     steps:
