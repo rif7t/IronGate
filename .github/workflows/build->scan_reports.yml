@@ -16,6 +16,11 @@ jobs:
     outputs:
       image_repo: ${{ steps.setrepo.outputs.image_repo }}
       digest: ${{ steps.digest.outputs.digest }}
+    services:
+      registry:
+        image:  registry:1
+        ports:
+        - 8000:8000
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -26,18 +31,11 @@ jobs:
           echo "image_repo=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
           echo "IMAGE_REPO=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
 
-      - name: Docker Login (GHCR)
+      - name: Docker Login 
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
-          username: rif7t
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: docker/setup-buildx-action@v3
-      - name: Convert repo name to lowercase
-        run: |
-          REPO_LC=$(echo "${GITHUB_REPOSITORY##*/}" | tr '[:upper:]' '[:lower:]')
-          echo "repo_lc=$REPO_LC" >> $GITHUB_ENV
+          username: ${{ secrets.DOCKERUSERNAME }}
+          password: ${{ secrets.DOCKERPASSWORD }}
 
       - name: Build & Push Docker images
         id: build
@@ -46,7 +44,7 @@ jobs:
           sbom: true
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/irongate:latest
+          tags: irongate:latest
           
 
       - name: Expose digest as output
@@ -168,8 +166,8 @@ jobs:
         - uses: addnab/docker-run-action@v3
           with:
             # Image
-            image: ghcr.io/${{ github.repository_owner }}/irongate:latest
-            options: -d -p 8000:80 --name app_container 
+            image: docker.io/irongate:latest
+            options: -d -p 8000:8000 --name app_container 
 
             
         - name: ZAP Scan
