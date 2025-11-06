@@ -168,7 +168,7 @@ jobs:
       - uses: addnab/docker-run-action@v3
         with:
           # Image
-          image: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          image: ghcr.io/test_repo:${{ github.sha }}
           options: -d -p 8080:80 --name app_container
           
       - name: ZAP Scan
