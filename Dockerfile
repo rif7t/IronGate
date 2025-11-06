@@ -22,9 +22,9 @@
 FROM golang:1.25 AS builder
 
 # Set working directory
-WORKDIR /app
+WORKDIR /build
 
-# Copy your Go server source
+# Copy your Go server folder
 COPY apps/go_server/ .
 
 # Download dependencies
@@ -36,16 +36,12 @@ RUN go build -o server .
 # ---- Run stage ----
 FROM gcr.io/distroless/base-debian12
 
-# Set working directory inside the container
 WORKDIR /app
 
-# Copy the built binary from builder
-COPY --from=builder /app/server .
+COPY --from=builder /build/server .
 
-# Expose your server port
 EXPOSE 8000
 
-# Run the compiled Go binary
 CMD ["./server"]
 
 
