@@ -168,7 +168,7 @@ jobs:
             # Image
             image: r1ft/irongate:latest
             options: --network host --name app_container
-            run: uvicorn app:app --host 0.0.0.0 --port 8000
+            
             
         - name: ZAP Scan
           uses: zaproxy/action-baseline@v0.15.0
