@@ -20,6 +20,6 @@ jobs:
       - name: Build hello-api-go
         working-directory: ${{ github.workspace }}/apps/go_server
         run: |
-          go build -v .
+          go build -v 
           ./hello-api-go & sleep 1
           curl -sSf http://localhost:8080/health | grep -q "ok"
