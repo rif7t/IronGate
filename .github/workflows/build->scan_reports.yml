@@ -167,20 +167,17 @@ jobs:
           with:
             # Image
             image: r1ft/irongate:latest
-            options: --network host -d --name app_container
-            docker_network: zapnet
-
+            options: --network host --name app_container
+            run: uvicorn app:app --host 0.0.0.0 --port 8000
             
         - name: ZAP Scan
           uses: zaproxy/action-baseline@v0.15.0
           with:
-            target: 'http://localhost:8000'
+            target: 'http://app_container:8000'
             rules_file_name: 'rules.tsv'
             cmd_options: '-a'
             allow_issue_writing: false
-          env:
-            DOCKER_NETWORK: zapnet
-
+        
         
         - name: Upload HTML report
           uses: actions/upload-artifact@v4
