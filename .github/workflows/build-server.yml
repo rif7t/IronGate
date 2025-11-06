@@ -24,4 +24,4 @@ jobs:
       - name: Build hello-api-go
         run: |
           go build -v server.go
-          go run server.go
+          
