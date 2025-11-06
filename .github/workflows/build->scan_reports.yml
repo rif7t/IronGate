@@ -167,7 +167,7 @@ jobs:
           with:
             # Image
             image: r1ft/irongate:latest
-            options: -d -p 8000:8000 --name app_container 
+            options: --network host -d --name app_container
 
             
         - name: ZAP Scan
