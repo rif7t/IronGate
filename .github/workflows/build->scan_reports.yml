@@ -168,6 +168,7 @@ jobs:
             # Image
             image: r1ft/irongate:latest
             options: --network host -d --name app_container
+            docker_network: zapnet
 
             
         - name: ZAP Scan
@@ -177,6 +178,8 @@ jobs:
             rules_file_name: 'rules.tsv'
             cmd_options: '-a'
             allow_issue_writing: false
+          env:
+            DOCKER_NETWORK: zapnet
             
         
         - name: Upload HTML report
