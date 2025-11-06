@@ -150,9 +150,8 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: main
+        uses: actions/checkout@v4
+        
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.14.0
         with:
