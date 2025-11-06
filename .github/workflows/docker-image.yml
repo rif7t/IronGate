@@ -161,6 +161,7 @@ jobs:
           rules_file_name: 'rules.tsv'
           cmd_options: '-a'
           allow_issue_writing: false
+          artifact_name: zapreport.sarif
       
       - name: Upload SARIF to Code Scanning
         uses: github/codeql-action/upload-sarif@v3
