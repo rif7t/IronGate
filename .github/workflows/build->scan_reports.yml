@@ -144,9 +144,9 @@ jobs:
     name: Run DAST scan on the web application
     permissions:
       contents: read
-      security-events: write   # required to upload SARIF
-      checks: write            # some actions annotate checks
-      pull-requests: write     # only if you want PR comments/annotations
+      security-events: write   
+      checks: write            
+      pull-requests: write    
 
     steps:
       - name: Checkout
@@ -160,7 +160,7 @@ jobs:
           rules_file_name: 'rules.tsv'
           cmd_options: '-a'
           allow_issue_writing: false
-          artifact_name: zapreport.sarif
+          artifact_name: zapreport.json
       
       - name: Upload SARIF to Code Scanning
         uses: github/codeql-action/upload-sarif@v3
