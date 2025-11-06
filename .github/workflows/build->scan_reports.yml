@@ -159,17 +159,6 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v4
 
-        - uses: docker/login-action@v3
-          with:
-            registry: ghcr.io
-            username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
-    
-        - uses: addnab/docker-run-action@v3
-          with:
-            # Image
-            image: ghcr.io/${{ github.repository_owner }}/irongate:latest
-            options: -d -p 8000:80 --name app_container 
             
         - name: ZAP Scan
           uses: zaproxy/action-baseline@v0.15.0
