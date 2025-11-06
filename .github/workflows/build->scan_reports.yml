@@ -164,12 +164,16 @@ jobs:
           registry: docker.io
           username: ${{ secrets.DOCKERUSERNAME }}
           password: ${{ secrets.DOCKERPASSWORD }}
+          
+      - name: Run Image
+        run: |
+            docker run -d -p 8000:80 ${{ needs.build.outputs.image_repo }}@${{ needs.build.outputs.digest }}
+            sleep 5
         
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.15.0
         with:
-          docker_name: ${{ needs.build.outputs.image_repo }}@${{ needs.build.outputs.digest }}
-          target: 'http://testphp.vulnweb.com/'
+          target: 'http://localhost:8000'
           rules_file_name: 'rules.tsv'
           cmd_options: '-a'
           allow_issue_writing: false
