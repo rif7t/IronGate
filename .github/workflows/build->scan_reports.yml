@@ -168,7 +168,8 @@ jobs:
       - uses: addnab/docker-run-action@v3
         with:
           # Image
-          image: docker.io/library/ecf5d1:299423a0d524438abbad37abcf80de91
+          image: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          options: -d -p 8080:80 --name app_container
           
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.15.0
