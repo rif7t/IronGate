@@ -18,7 +18,7 @@ jobs:
       digest: ${{ steps.digest.outputs.digest }}
     services:
       registry:
-        image:  irongate:latest
+        image:  r1ft/irongate:latest
         ports:
         - 8000:8000
     steps:
@@ -44,7 +44,7 @@ jobs:
           sbom: true
           context: .
           push: true
-          tags: irongate:latest
+          tags: r1ft/irongate:latest
           
 
       - name: Expose digest as output
@@ -166,7 +166,7 @@ jobs:
         - uses: addnab/docker-run-action@v3
           with:
             # Image
-            image: docker.io/irongate:latest
+            image: r1ft/irongate:latest
             options: -d -p 8000:8000 --name app_container 
 
             
