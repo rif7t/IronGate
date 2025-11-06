@@ -46,7 +46,7 @@ jobs:
           sbom: true
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/${{ env.repo_lc }}:latest
+          tags: ghcr.io/${{ github.repository_owner }}/irongate:latest
 
       - name: Expose digest as output
         id: digest
@@ -173,8 +173,8 @@ jobs:
       - uses: addnab/docker-run-action@v3
         with:
           # Image
-          image: ghcr.io/${{ github.repository_owner }}/${{ env.repo_lc }}:latest
-          options: -d -p 8080:80 --name app_container
+          image: ghcr.io/${{ github.repository_owner }}/irongate:latest
+          options: -d -p 8080:80 --name app_container 
           
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.15.0
