@@ -41,7 +41,7 @@ jobs:
           sbom: true
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          tags: ghcr.io/test_repo:${{ github.sha }}
 
       - name: Expose digest as output
         id: digest
