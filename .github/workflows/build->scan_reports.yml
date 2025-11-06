@@ -76,13 +76,13 @@ jobs:
         uses: docker/scout-action@v1
         with:
           command: quickview
-          image: ${{ needs.build.outputs.image_repo }}@${{ needs.build.outputs.digest }}
+          image: r1ft/irongate:latest
 
       - name: CVEs (fail on High/Critical)
         uses: docker/scout-action@v1
         with:
           command: cves
-          image: ${{ needs.build.outputs.image_repo }}@${{ needs.build.outputs.digest }}
+          image: r1ft/irongate:latest
           only-severities: critical,high
 
   sign:
@@ -104,13 +104,13 @@ jobs:
       - uses: sigstore/cosign-installer@v3.6.0
       - name: Cosign sign by digest
         env:
-          IMAGE_REF: ${{ needs.build.outputs.image_repo }}@${{ needs.build.outputs.digest }}
+          IMAGE_REF: r1ft/irongate:latest
         run: |
           echo "Signing $IMAGE_REF"
           cosign sign --yes "$IMAGE_REF"
       - name: Verify signature
         env:
-          IMAGE_REF: ${{ needs.build.outputs.image_repo }}@${{ needs.build.outputs.digest }}
+          IMAGE_REF: r1ft/irongate:latest}
         run: |
           echo "Expect identity: https://github.com/${{ github.workflow_ref }}"
           cosign verify \
