@@ -165,15 +165,12 @@ jobs:
           registry: docker.io
           username: ${{ secrets.DOCKERUSERNAME }}
           password: ${{ secrets.DOCKERPASSWORD }}
-          
-      - name: Run Server Image
-        uses: addnab/docker-run-action@v3
+
+      - uses: addnab/docker-run-action@v3
         with:
           # Image
           image: docker.io/library/ecf5d1:299423a0d524438abbad37abcf80de91
-         
           
-        
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.15.0
         with:
