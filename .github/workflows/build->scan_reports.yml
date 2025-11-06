@@ -170,7 +170,7 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           # Image
-          image: ${{ needs.build.outputs.image_repo }}@${{ needs.build.outputs.digest }}
+          image: docker.io/library/ecf5d1:299423a0d524438abbad37abcf80de91
          
           
         
