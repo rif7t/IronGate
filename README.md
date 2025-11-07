@@ -35,13 +35,22 @@ It focuses on end-to-end visibility and CI/CD integrity while remaining simple e
       - `zap_scan.yml` – DAST pipeline with OWASP ZAP
   - **apps/**
     - **go_server/** – Sample Go web server
-      - `main.go`
+      - `server.go`
       - `go.mod`
-      - `Dockerfile`
   - **policy/**
     - `docker.rego` – Example OPA/Conftest policy
   - **reports/** – Generated scan reports (ZAP, Syft, etc.)
+  - **docs/**
+  - **monitoring/**
+    - **prometheus/**
+  - `Dockerfile`
   - `README.md`
+  - `requirements.txt`
+  - `rules.tsv`
+  - `testapp.py`
+  - `zapreport.sarif`
+  - `.gitignore`
+  - `bfg-1.15.0.jar`
 
 ---
 
