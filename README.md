@@ -10,7 +10,7 @@ It focuses on end-to-end visibility and CI/CD integrity while remaining simple e
 
 ---
 
-## 🚀 Features
+##  Features
 
 | Area                       | Description                                                                 |
 |-----------------------------|-----------------------------------------------------------------------------|
@@ -24,7 +24,7 @@ It focuses on end-to-end visibility and CI/CD integrity while remaining simple e
 
 ---
 
-## 🧩 Architecture Overview
+##  Architecture Overview
 
 - **IronGate/**
   - **.github/**
