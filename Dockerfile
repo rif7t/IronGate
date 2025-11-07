@@ -33,7 +33,7 @@ WORKDIR /app/apps/go_server
 RUN go mod tidy
 RUN go build -o server .
 
-# Optionally run stage for final image (if you want a lightweight one)
+
 FROM debian:bookworm-slim
 WORKDIR /app
 COPY --from=builder /app/apps/go_server/server .
