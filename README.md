@@ -9,7 +9,7 @@ An end-to-end DevSecOps lab that signs, builds, enforces policy, and ships telem
 ## What is IronGate?
 - IronGate is a miniature secure software factory designed to demonstrate modern DevSecOps practices.
 
-- Currently implemented
+## Currently implemented
 
 - SBOM generation for every build (Syft)
 
@@ -19,7 +19,7 @@ An end-to-end DevSecOps lab that signs, builds, enforces policy, and ships telem
 
 - Container signing and verification (Cosign)
 
-- Planned extensions
+## Planned extensions
 
 - Go-based Kubernetes Validating Webhook for blocking insecure pods
 
