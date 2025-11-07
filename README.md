@@ -26,21 +26,22 @@ It focuses on end-to-end visibility and CI/CD integrity while remaining simple e
 
 ## 🧩 Architecture Overview
 
-IronGate/
-├── .github/
-│   └── workflows/
-│       ├── build.yml         # CI/CD pipeline (build, test, scan)
-│       └── zap_scan.yml      # DAST pipeline with OWASP ZAP
-├── apps/
-│   └── go_server/            # Sample Go web server
-│       ├── main.go
-│       ├── go.mod
-│       └── Dockerfile
-├── policy/
-│   └── docker.rego           # Example OPA/Conftest policy
-├── reports/                  # Generated scan reports (ZAP, Syft, etc.)
-└── README.md
+## 🧩 Architecture Overview
 
+- **IronGate/**
+  - **.github/**
+    - **workflows/**
+      - `build.yml` – CI/CD pipeline (build, test, scan)
+      - `zap_scan.yml` – DAST pipeline with OWASP ZAP
+  - **apps/**
+    - **go_server/** – Sample Go web server
+      - `main.go`
+      - `go.mod`
+      - `Dockerfile`
+  - **policy/**
+    - `docker.rego` – Example OPA/Conftest policy
+  - **reports/** – Generated scan reports (ZAP, Syft, etc.)
+  - `README.md`
 
 ---
 
