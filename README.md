@@ -37,7 +37,6 @@ It focuses on end-to-end visibility and CI/CD integrity while remaining simple e
       - `server.go`
   - **policy/**
     - `docker.rego` – Example OPA/Conftest policy
-  - **reports/** – Generated scan reports (ZAP, Syft, etc.)
   - **docs/**
     - `plan.md`
   - **monitoring/**
