@@ -31,27 +31,33 @@ It focuses on end-to-end visibility and CI/CD integrity while remaining simple e
 - **IronGate/**
   - **.github/**
     - **workflows/**
-      - `build.yml` – CI/CD pipeline (build, test, scan)
-      - `zap_scan.yml` – DAST pipeline with OWASP ZAP
+      - `build->scan_reports.yml` – DAST pipeline with OWASP ZAP
+      - `build-server.yml` – CI/CD pipeline (build, test, scan)
   - **apps/**
     - **go_server/** – Sample Go web server
-      - `server.go`
       - `go.mod`
+      - `go.sum`
+      - `server.go`
   - **policy/**
     - `docker.rego` – Example OPA/Conftest policy
   - **reports/** – Generated scan reports (ZAP, Syft, etc.)
   - **docs/**
+    - `plan.md`
   - **monitoring/**
     - **prometheus/**
+      - `LICENSE`
+      - `NOTICE`
+      - `go.mod`
+      - `prometheus.yml`
+  - `.gitignore`
   - `Dockerfile`
   - `README.md`
+  - `bfg-1.15.0.jar`
   - `requirements.txt`
   - `rules.tsv`
   - `testapp.py`
   - `zapreport.sarif`
-  - `.gitignore`
-  - `bfg-1.15.0.jar`
-
+  
 ---
 
 ## 🧪 How It Works
