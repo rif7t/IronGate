@@ -20,33 +20,38 @@
 #CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 # syntax=docker/dockerfile:1
 # ---- Build stage ----
+# ---- Build Stage ----
 FROM golang:1.25 AS builder
 
 WORKDIR /app
+
+# Copy only your Go app
 COPY apps/go_server/ ./apps/go_server/
 WORKDIR /app/apps/go_server
 
-# Force Linux amd64 build to avoid arch mismatch
-RUN GOOS=linux GOARCH=amd64 go mod tidy && go build -o /server .
+# Download dependencies and build
+RUN go mod tidy && \
+    go build -o /app/server .
 
-# ---- Run stage ----
-FROM ubuntu:24.04
+# ---- Run Stage ----
+FROM ubuntu:22.04
+
+# Install simple debugging tools
+RUN apt-get update && \
+    apt-get install -y curl netcat file && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-COPY --from=builder /server .
-
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-       curl \
-       ca-certificates \
-       netcat-openbsd \
-    && chmod +x /app/server \
-    && rm -rf /var/lib/apt/lists/*
-
+COPY --from=builder /app/server /app/server
 EXPOSE 8080
 
-# Add diagnostics
-CMD echo "Starting Go server..." && ls -lh /app && file /app/server && ./server
+# Debug: print directory contents before running
+CMD echo "===> Starting container..." && \
+    echo "Contents of /app:" && ls -lh /app && \
+    echo "File info:" && file /app/server && \
+    echo "===> Launching Go server..." && \
+    /app/server || (echo "⚠️ Server crashed unexpectedly"; sleep 60)
+
 
 
 
