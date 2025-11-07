@@ -162,7 +162,25 @@ jobs:
             registry: docker.io
             username: ${{ secrets.DOCKERUSERNAME }}
             password: ${{ secrets.DOCKERPASSWORD }}
-    
+
+        - name: Run Go app container
+          run: |
+            docker run -d -p 8080:8080 --name app_container r1ft/irongate:latest
+            echo "Waiting for Go app to start..."
+            for i in {1..10}; do
+              if curl -fs http://localhost:8080/ping >/dev/null; then
+                echo "Server is up!"
+                exit 0
+              fi
+              echo "Waiting for server ($i)..."
+              sleep 3
+            done
+            echo "Server did not start in time" >&2
+            docker logs app_container
+            exit 1
+
+        - name: Show running containers
+          run: docker ps -a
         - uses: addnab/docker-run-action@v3
           with:
             # Image
@@ -185,26 +203,7 @@ jobs:
             echo "Server did not start in time" >&2
             docker logs app_container
             exit 1
-
-        - name: Run Go app container
-          run: |
-            docker run -d -p 8080:8080 --name app_container r1ft/irongate:latest
-            echo "Waiting for Go app to start..."
-            for i in {1..10}; do
-              if curl -fs http://localhost:8080/ping >/dev/null; then
-                echo "Server is up!"
-                exit 0
-              fi
-              echo "Waiting for server ($i)..."
-              sleep 3
-            done
-            echo "Server did not start in time" >&2
-            docker logs app_container
-            exit 1
-
-        - name: Show running containers
-          run: docker ps -a
-            
+    
         - name: ZAP Scan
           uses: zaproxy/action-baseline@v0.15.0
           with:
