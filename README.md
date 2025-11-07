@@ -58,7 +58,7 @@ It focuses on end-to-end visibility and CI/CD integrity while remaining simple e
   
 ---
 
-## 🧪 How It Works
+##   How It Works
 
 **Builds & SBOM:**  
 Each commit triggers a Docker build that also generates an SBOM via Syft.
@@ -74,7 +74,7 @@ Images are signed with Cosign (currently placeholder stage; full verification pl
 
 ---
 
-## 🧠 Roadmap
+##   Roadmap
 
 | Planned Feature                        | Purpose                                                       |
 |---------------------------------------|---------------------------------------------------------------|
