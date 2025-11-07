@@ -28,7 +28,7 @@ COPY apps/go_server/ ./apps/go_server/
 WORKDIR /app/apps/go_server
 
 RUN go mod tidy
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o server .
+RUN GOOS=linux GOARCH=amd64 go build -o server .
 
 # ----------- Runtime Stage -----------
 FROM ubuntu:24.04
@@ -40,12 +40,15 @@ COPY --from=builder /app/apps/go_server/server .
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
        curl \
+       ca-certificates \
        netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8080
 
 HEALTHCHECK CMD curl -f http://localhost:8080/Healthy || exit 1
+# Print debug info before starting
+CMD echo "Starting Go server..." && ls -l && ./server
 
 CMD ["./server"]
 
