@@ -7,7 +7,6 @@
 IronGate is a lightweight prototype of a secure software factory that I built to explore real world DevSecOps automation with Go, Docker, and GitHub Actions.
 
 It focuses on end-to-end visibility and CI/CD integrity while remaining simple enough to extend.
-
 ---
 
 ##  Features
