@@ -19,38 +19,34 @@
 # Run the app with uvicorn (for FastAPI/Flask)
 #CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 # syntax=docker/dockerfile:1
-# ----------- Build Stage -----------
+# ---- Build stage ----
 FROM golang:1.25 AS builder
 
 WORKDIR /app
-
 COPY apps/go_server/ ./apps/go_server/
 WORKDIR /app/apps/go_server
 
-RUN go mod tidy
-RUN GOOS=linux GOARCH=amd64 go build -o server .
+# Force Linux amd64 build to avoid arch mismatch
+RUN GOOS=linux GOARCH=amd64 go mod tidy && go build -o /server .
 
-# ----------- Runtime Stage -----------
+# ---- Run stage ----
 FROM ubuntu:24.04
 
 WORKDIR /app
-
-COPY --from=builder /app/apps/go_server/server .
+COPY --from=builder /server .
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
        curl \
        ca-certificates \
        netcat-openbsd \
+    && chmod +x /app/server \
     && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8080
 
-HEALTHCHECK CMD curl -f http://localhost:8080/Healthy || exit 1
-# Print debug info before starting
-CMD echo "Starting Go server..." && ls -l && ./server
-
-CMD ["./server"]
+# Add diagnostics
+CMD echo "Starting Go server..." && ls -lh /app && file /app/server && ./server
 
 
 
