@@ -21,9 +21,8 @@
 FROM golang:1.25 AS builder
 
 WORKDIR /app
-COPY apps/go_server/ ./apps/go_server/
-WORKDIR /app/apps/go_server
-
+COPY apps/go_server/go.* ./
+COPY apps/go_server/*.go ./
 RUN go mod tidy
 RUN go build -o server .
 
