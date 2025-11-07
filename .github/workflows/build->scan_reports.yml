@@ -167,10 +167,22 @@ jobs:
           with:
             # Image
             image: r1ft/irongate:latest
-            options: --network host -d -p 8080:8080 --name app_container
+            options:  -d -p 8080:8080 --name app_container
             
-        - name: Wait for app startup
-          run: sleep 5
+        - name: Wait for app to start
+          run: |
+            for i in {1..10}; do
+              if curl -sSf http://localhost:8080/Healthy; then
+                echo "Server is up!"
+                exit 0
+              fi
+              echo "Waiting for server..."
+              sleep 3
+            done
+            echo "Server did not start in time" >&2
+            docker logs app_container
+            exit 1
+
           
         - name: ZAP Scan
           uses: zaproxy/action-baseline@v0.15.0
