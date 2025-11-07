@@ -18,20 +18,26 @@
 
 # Run the app with uvicorn (for FastAPI/Flask)
 #CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+# syntax=docker/dockerfile:1
 FROM golang:1.25 AS builder
 
 WORKDIR /app
-COPY apps/go_server/go.* ./
-COPY apps/go_server/*.go ./
+
+# Copy the go_server source
+COPY apps/go_server/ ./apps/go_server/
+
+# Move into that directory
+WORKDIR /app/apps/go_server
+
+# Download dependencies and build
 RUN go mod tidy
 RUN go build -o server .
 
-FROM gcr.io/distroless/base-debian12
-
+# Optionally run stage for final image (if you want a lightweight one)
+FROM debian:bookworm-slim
 WORKDIR /app
-COPY --from=builder /app/server .
-
-EXPOSE 8000
+COPY --from=builder /app/apps/go_server/server .
 CMD ["./server"]
+
 
 
