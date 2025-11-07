@@ -173,7 +173,7 @@ jobs:
         - name: ZAP Scan
           uses: zaproxy/action-baseline@v0.15.0
           with:
-            target: 'http://app_container:8000'
+            target: 'http://localhost:8000'
             rules_file_name: 'rules.tsv'
             cmd_options: '-a'
             allow_issue_writing: false
