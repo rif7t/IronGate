@@ -76,10 +76,10 @@ Images are signed with Cosign (currently placeholder stage; full verification pl
 
 | Planned Feature                        | Purpose                                                       |
 |---------------------------------------|---------------------------------------------------------------|
-| **🦀 Rust Log Agent**                   | Centralized, signed telemetry ingestion                     |
-| **🔐 Vault-backed Ephemeral Secrets**  | Secure short-lived credentials for builds                    |
-| **🧰 Incident Runbooks & Chaos Tests** | Resilience and emergency response simulations               |
-| **⚙️ Go Kubernetes Validating Webhook** | Prevent insecure pods from being deployed                   |
+| ** Rust Log Agent**                   | Centralized, signed telemetry ingestion                     |
+| ** Vault-backed Ephemeral Secrets**  | Secure short-lived credentials for builds                    |
+| ** Incident Runbooks & Chaos Tests** | Resilience and emergency response simulations               |
+| ** Go Kubernetes Validating Webhook** | Prevent insecure pods from being deployed                   |
 
 ---
 ##  Running Locally
