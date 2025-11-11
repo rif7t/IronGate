@@ -8,7 +8,7 @@ RUN go mod tidy && \
     go build -o /app/server .
 
 
-FROM alpine:3.20
+FROM ubuntu:22.04
 WORKDIR /app
 COPY --from=builder /app/server /app/server
 EXPOSE 8080
@@ -17,7 +17,18 @@ EXPOSE 8080
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
-CMD /app/server 
+CMD echo "===> Starting container..." && \
+    echo "Contents of /app:" && ls -lh /app && \
+    echo "File info:" && file /app/server && \
+    echo "===> Launching Go server..." && \
+    /app/server || (echo "️ Server crashed unexpectedly"; sleep 60) 
+
+
+
+
+
+
+
 
 
 
