@@ -1,0 +1,8 @@
+repos:
+  - repo: https://github.com/open-policy-agent/conftest
+    rev: HEAD  # Use a specific tag or 'HEAD' for the latest commit
+    hooks:
+      - id: conftest-test
+        args: [--policy, policy/dockerfile]  # Specify your policy directory
+      - id: conftest-verify
+        args: [--policy, policy/dockerfile]
