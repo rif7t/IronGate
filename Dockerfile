@@ -1,7 +1,7 @@
 
 FROM golang:1.25 AS builder
 
-WORKDIR /app
+WORKDIR /app 
 
 # Copy only Go app
 COPY apps/go_server/ ./apps/go_server/
