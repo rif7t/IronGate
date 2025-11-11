@@ -1,0 +1,33 @@
+name: conftest-verify-dockerfile
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'Dockerfile'
+      - 'policy/dockerfile/**.rego'
+
+env:
+  CONFTEST_VERSION: 0.64.0
+
+jobs:
+  dockerfile:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Conftest
+        run: |
+          wget -O - "https://github.com/open-policy-agent/conftest/releases/download/v${{ env.CONFTEST_VERSION }}/conftest_${{ env.CONFTEST_VERSION }}_Linux_x86_64.tar.gz" | tar zxvf -
+          ./conftest --version
+
+      - name: Verify Dockerfile against policies
+        run: |
+          ./conftest verify -p dockerfile

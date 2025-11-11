@@ -1,4 +1,4 @@
-name: IronGate CI
+name: build basic sever demo
 
 on:
   push:
