@@ -1,33 +1,61 @@
-
 name: conftest-fmt-and-verify-all
 
 on:
   pull_request:
     branches: [ main ]
     paths:
-      - 'policy/dockerfile'
+      - 'policy/dockerfile/**.rego'  # only trigger if Rego policies under this path change
+
 env:
   CONFTEST_VERSION: 0.64.0
+
 jobs:
   dockerfile:
-    name: fmt-all
+    name: Fmt and verify changed Dockerfile policies
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  
 
       - name: Install conftest
         run: |
-          wget -O - 'https://github.com/open-policy-agent/conftest/releases/download/v${{ env.CONFTEST_VERSION }}/conftest_${{ env.CONFTEST_VERSION }}_Linux_x86_64.tar.gz' | tar zxvf -
+          wget -O - "https://github.com/open-policy-agent/conftest/releases/download/v${{ env.CONFTEST_VERSION }}/conftest_${{ env.CONFTEST_VERSION }}_Linux_x86_64.tar.gz" | tar zxvf -
           ./conftest --version
 
-      - name: conftest fmt
+      - name: Get changed policy files
+        id: changes
         run: |
-          git add . && ./conftest fmt ./ && git diff --exit-code ./.    // 
+          # Compare current HEAD with base of the PR
+          changed=$(git diff --name-only origin/${{ github.base_ref }} HEAD | grep '^policy/dockerfile/.*\.rego$' || true)
+          echo "Changed files:"
+          echo "$changed"
+          echo "files=$changed" >> $GITHUB_OUTPUT
 
-      - name: conftest verify
+      - name: Format changed Rego policies
+        if: steps.changes.outputs.files != ''
         run: |
-          ./conftest verify ./   // 
+          set -e
+          for file in ${{ steps.changes.outputs.files }}; do
+            echo "Formatting $file"
+            ./conftest fmt "$file"
+          done
+          git diff --exit-code || (echo "Formatting issues found. Run 'conftest fmt .' locally."; exit 1)
+
+      - name: Verify changed Rego policies
+        if: steps.changes.outputs.files != ''
+        run: |
+          set -e
+          for file in ${{ steps.changes.outputs.files }}; do
+            echo "Verifying $file"
+            ./conftest verify "$(dirname "$file")"
+          done
+
+      - name: No Rego files changed
+        if: steps.changes.outputs.files == ''
+        run: echo "No policy changes detected. Skipping conftest steps."
