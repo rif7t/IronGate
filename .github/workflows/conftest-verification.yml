@@ -30,4 +30,4 @@ jobs:
 
       - name: Verify Dockerfile against policies
         run: |
-          ./conftest verify Dockerfile
+          ./conftest verify -p dockerfile
