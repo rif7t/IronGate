@@ -36,7 +36,10 @@ It focuses on end-to-end visibility and CI/CD integrity while remaining simple e
       - `go.sum`
       - `server.go`
   - **policy/**
-    - `docker.rego` – Example OPA/Conftest policy
+    - dockerfile
+    - general
+    - terraform
+    - workflows
   - **docs/**
     - `plan.md`
   - **monitoring/**
