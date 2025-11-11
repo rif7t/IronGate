@@ -5,7 +5,7 @@ COPY apps/go_server/ ./apps/go_server/
 WORKDIR /app/apps/go_server
 
 RUN go mod tidy && \
-    go build -o /app/server .RUN go build -o server .
+    go build -o /app/server .
 
 # Final image
 FROM alpine:3.20
