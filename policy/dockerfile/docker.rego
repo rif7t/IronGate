@@ -1,6 +1,6 @@
 package docker.policy
 
-# Non-root user checks
+# any user checks
 deny_no_user contains msg if {
     not any_user
     msg := "Container must specify a non-root user"
@@ -18,11 +18,6 @@ deny_root_user contains msg if {
     entry.Cmd == "user"
     entry.Value[idx] == "root"
     msg := sprintf("Line %d: Container must not run as root", [idx])
-}
-
-any_user if {
-    some idx
-    input[idx].Cmd == "user"
 }
 
 # ADD/COPY check
