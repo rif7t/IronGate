@@ -18,10 +18,10 @@ EXPOSE 8080
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
-CMD echo "===> Starting container..." && \
+CMD echo " Starting container.." && \
     echo "Contents of /app:" && ls -lh /app && \
     echo "File info:" && file /app/server && \
-    echo "===> Launching Go server..." && \
+    echo " Launching Go server.." && \
     /app/server || (echo "️ Server crashed unexpectedly"; sleep 60)
 
 
