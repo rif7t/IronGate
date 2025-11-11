@@ -26,7 +26,8 @@ CMD echo "===> Starting container..." && \
     echo "Contents of /app:" && ls -lh /app && \
     echo "File info:" && file /app/server && \
     echo "===> Launching Go server..." && \
-    /app/server || (echo "️ Server crashed unexpectedly"; sleep 60)
+    /app/server || (echo "️ Server crashed unexpectedly"; sleep 60) \
+    --user $(id -u):$(id -g)
 
 
 
