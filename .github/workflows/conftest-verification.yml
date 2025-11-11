@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'policy/dockerfile/**.rego'  # only trigger if Rego policies under this path change
+      - 'Dockerfile'
 
 env:
   CONFTEST_VERSION: 0.64.0
