@@ -7,7 +7,6 @@ WORKDIR /app/apps/go_server
 RUN go mod tidy && \
     go build -o /app/server .
 
-    
 # Final image
 FROM alpine:3.20
 WORKDIR /app
