@@ -1,34 +1,28 @@
-
-FROM golang:1.25 AS builder
-
+# Build stagee
+FROM golang:1.23-alpine AS builder
 WORKDIR /app
-
-# Copy only Go app
 COPY apps/go_server/ ./apps/go_server/
 WORKDIR /app/apps/go_server
 
 
 RUN go mod tidy && \
-    go build -o /app/server .
+    go build -o /app/server .RUN go build -o server .
 
-
-FROM ubuntu:22.04
-
-# Install simple debugging tools
-RUN apt-get update && \
-    apt-get install -y curl netcat file && \
-    rm -rf /var/lib/apt/lists/*
-
+# Final image
+FROM alpine:3.20
 WORKDIR /app
 COPY --from=builder /app/server /app/server
 EXPOSE 8080
+
+# Create a non-root user and switch to it
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
 
 CMD echo "===> Starting container..." && \
     echo "Contents of /app:" && ls -lh /app && \
     echo "File info:" && file /app/server && \
     echo "===> Launching Go server..." && \
     /app/server || (echo "️ Server crashed unexpectedly"; sleep 60)
-
 
 
 
