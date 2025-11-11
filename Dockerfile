@@ -22,4 +22,3 @@ CMD echo " Starting container.." && \
     echo "File info:" && file /app/server && \
     echo " Launching Go server.." && \
     /app/server || (echo "️ Server crashed unexpectedly"; sleep 60)
-    
