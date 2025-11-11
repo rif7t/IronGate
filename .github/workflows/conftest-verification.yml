@@ -9,7 +9,7 @@ on:
 env:
   CONFTEST_VERSION: 0.64.0
 jobs:
-  terraform:
+  dockerfile:
     name: fmt-all
     runs-on: ubuntu-latest
     defaults:
