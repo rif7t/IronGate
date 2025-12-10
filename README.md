@@ -4,9 +4,9 @@
 
 # IronGate
 
-IronGate is a lightweight prototype of a secure software factory that I built to explore real world App Security automation with Go, Docker, and GitHub Actions.
+IronGate is a secure software factory that I built to demonstrate real world App Security automation with Go, Docker, and GitHub Actions.
 
-It focuses on end-to-end visibility and CI/CD integrity while remaining simple enough to extend.
+It focuses on end-to-end security and CI/CD integrity.
 ---
 
 ##  Features
@@ -65,7 +65,7 @@ It focuses on end-to-end visibility and CI/CD integrity while remaining simple e
 Each commit triggers a Docker build that also generates an SBOM via Syft.
 
 **Policy Checks:**  
-Before deployment, OPA/Conftest evaluates Dockerfiles and Terraform configs for compliance.
+Before deployment, OPA/Conftest evaluates configuration files for compliance.
 
 **Security Scans:**  
 ZAP runs against the running container (`localhost:8080`), producing an HTML report.
